@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import UserCard from './components/UserCard';
+import './App.css';
 
 class App extends React.Component {
   // constructor() {
@@ -25,31 +26,26 @@ class App extends React.Component {
         this.setState({
           user: response.data
         }) 
-      })
-        .then(res => {
-          axios.get('https://api.github.com/users/rashmipoddar/followers')
-            .then(followersResponse => {
-              console.log(followersResponse);
-              followersResponse.data.forEach(follower => {
-                axios.get(follower.url) 
-                  .then(followerData => {
-                    console.log(followerData);
-                    this.setState({
-                      userFollowers: [...this.state.userFollowers, followerData.data]
-                    })
+        axios.get('https://api.github.com/users/rashmipoddar/followers')
+          .then(followersResponse => {
+            // console.log(followersResponse);
+            followersResponse.data.forEach(follower => {
+              axios.get(follower.url) 
+                .then(followerData => {
+                  // console.log(followerData);
+                  this.setState({
+                    userFollowers: [...this.state.userFollowers, followerData.data]
                   })
-                  .catch(followerError => {
-                    console.log(followerError);
-                  })
-              })
+                })
+                .catch(followerError => {
+                  console.log(followerError);
+                })
             })
-            .catch(followersError => {
-              console.log(followersError);
-            }) 
-        })
-        .catch(err => {
-          console.log('Error in getting follower data ', err);
-        })
+          })
+          .catch(followersError => {
+            console.log(followersError);
+          }) 
+      })
       .catch(error => {
         console.log('Error in getting data', error)
       })
@@ -57,12 +53,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <div> 
+      <div className='container'> 
         <h1>Github User Card</h1>
         <UserCard user={this.state.user}/>
+        <h1>Followers</h1>
         {this.state.userFollowers.map(userFollower => {
           return(
-            <UserCard user={userFollower} />
+            <UserCard user={userFollower} key={userFollower.id} />
           )
         })}
       </div>
