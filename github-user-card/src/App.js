@@ -18,7 +18,7 @@ class App extends React.Component {
   state = {
     user: {},
     userFollowers: [],
-    userName: ''
+    searchedUserFollowers: []
   }
 
   componentDidMount() {
@@ -53,10 +53,44 @@ class App extends React.Component {
       })
   }
 
+  handleSearchSubmit = (searchTerm) => {
+    axios.get(`https://api.github.com/users/${searchTerm}`)
+      .then(response => {
+        // console.log(response);
+        this.setState({
+          user: response.data,
+          userFollowers: []
+        }) 
+        axios.get(`https://api.github.com/users/${searchTerm}/followers`)
+          .then(followersResponse => {
+            // console.log(followersResponse);
+            console.log(followersResponse.data.length);
+            followersResponse.data.forEach(follower => {
+              axios.get(follower.url) 
+                .then(followerData => {
+                  // console.log(followerData);
+                  this.setState({
+                    userFollowers: [...this.state.userFollowers, followerData.data]
+                  })
+                })
+                .catch(followerError => {
+                  console.log(followerError);
+                })
+            })
+          })
+          .catch(followersError => {
+            console.log(followersError);
+          }) 
+      })
+      .catch(error => {
+        console.log('Error in getting data', error)
+      })
+  }
+
   render() {
     return (
       <div className='container'> 
-        <Form user={this.state.user}/>
+        <Form handleSearchSubmit={this.handleSearchSubmit} />
         <h1>Github User Card</h1>
         <UserCard user={this.state.user}/>
         <h1>Followers</h1>
