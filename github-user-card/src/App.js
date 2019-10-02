@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
+import Form from './components/Form';
 import UserCard from './components/UserCard';
 import './App.css';
 
@@ -16,7 +17,8 @@ class App extends React.Component {
 
   state = {
     user: {},
-    userFollowers: []
+    userFollowers: [],
+    userName: ''
   }
 
   componentDidMount() {
@@ -54,6 +56,7 @@ class App extends React.Component {
   render() {
     return (
       <div className='container'> 
+        <Form user={this.state.user}/>
         <h1>Github User Card</h1>
         <UserCard user={this.state.user}/>
         <h1>Followers</h1>
