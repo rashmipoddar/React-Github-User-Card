@@ -60,7 +60,7 @@ class App extends React.Component {
         this.setState({
           user: response.data,
           userFollowers: []
-        }) 
+        }, console.log('Updated user state')) 
         axios.get(`https://api.github.com/users/${searchTerm}/followers`)
           .then(followersResponse => {
             // console.log(followersResponse);
@@ -71,7 +71,7 @@ class App extends React.Component {
                   // console.log(followerData);
                   this.setState({
                     userFollowers: [...this.state.userFollowers, followerData.data]
-                  })
+                  }, console.log('updated user followers'))
                 })
                 .catch(followerError => {
                   console.log(followerError);
