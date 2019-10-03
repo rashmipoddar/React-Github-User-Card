@@ -17,36 +17,10 @@ class Form extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    axios.get(`https://api.github.com/users/${this.state.userName}`)
-      .then(response => {
-        console.log(response);
-        this.setState({
-          userName: response.data
-        }) 
-        // axios.get('https://api.github.com/users/rashmipoddar/followers')
-        //   .then(followersResponse => {
-        //     // console.log(followersResponse);
-        //     followersResponse.data.forEach(follower => {
-        //       axios.get(follower.url) 
-        //         .then(followerData => {
-        //           // console.log(followerData);
-        //           this.setState({
-        //             userFollowers: [...this.state.userFollowers, followerData.data]
-        //           })
-        //         })
-        //         .catch(followerError => {
-        //           console.log(followerError);
-        //         })
-        //     })
-        //   })
-        //   .catch(followersError => {
-        //     console.log(followersError);
-        //   }) 
-      })
-      .catch(error => {
-        console.log('Error in getting data', error)
-      })
-    
+    this.props.handleSearchSubmit(this.state.userName);
+    this.setState({
+      userName: ''
+    })
   }
 
   // componentDidUpdate(prevState, prevProps) {
@@ -66,6 +40,7 @@ class Form extends React.Component {
           type='username' 
           name='username' 
           placeholder='Username' 
+          value={this.state.userName}
           onChange={this.handleChange}
         />
         <button>Search</button>
